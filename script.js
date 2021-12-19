@@ -1,5 +1,11 @@
 const relativeTime = new RelativeTime("en");
 
+const el_select_from = document.getElementById("select_from");
+const el_select_to = document.getElementById("select_to");
+
+const el_input_from = document.getElementById("input_from");
+const el_input_to = document.getElementById("input_to");
+
 const base_currency = "EUR";
 var rates = {
   [base_currency]: 1,
@@ -50,9 +56,30 @@ function set_select_data() {
   select_to.set(localStorage.getItem("to") || base_currency);
 }
 
-get_rates();
+function update_forward() {
+  localStorage.setItem("from", select_from.selected());
+  if (el_input_from.value)
+    el_input_to.value =
+      get_convertion_rate(select_from.selected(), select_to.selected()) *
+      el_input_from.value;
+}
 
-const select_from = new SlimSelect({ select: "#select_from" });
-const select_to = new SlimSelect({ select: "#select_to" });
+function update_backward() {
+  localStorage.setItem("to", select_to.selected());
+  if (el_input_to.value)
+    el_input_from.value =
+      get_convertion_rate(select_to.selected(), select_from.selected()) *
+      el_input_to.value;
+}
+
+get_rates();
+const select_from = new SlimSelect({ select: el_select_from });
+const select_to = new SlimSelect({ select: el_select_to });
 
 set_select_data();
+
+el_input_from.addEventListener("input", update_forward);
+el_select_from.addEventListener("change", update_forward);
+
+el_input_to.addEventListener("input", update_backward);
+el_select_to.addEventListener("change", update_backward);
