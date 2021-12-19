@@ -25,21 +25,34 @@
       crossorigin="anonymous"
     />
 
-    <style></style>
+    <style>
+      .container {
+        margin: 0 auto;
+        max-width: 40rem;
+        padding: 0 2rem;
+
+        padding-bottom: 7.5rem;
+        padding-top: 7.5rem;
+      }
+
+      .mb-3 {
+        margin-bottom: 1rem;
+      }
+    </style>
   </head>
 
   <body>
-    <div>
-      <select id="select_from"></select>
-      <input type="number" id="input_from" />
-      <select id="select_to"></select>
-      <input type="number" id="input_to" />
+    <div class="row container">
+      <div class="column">
+        <select id="select_from" class="mb-3"></select>
+        <input type="number" id="input_from" min="0" />
+      </div>
+      <div class="column">
+        <select id="select_to" class="mb-3"></select>
+        <input type="number" id="input_to" min="0" />
+      </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/gh/PatrickHaussmann/crel@b1d9cf762ee369e626293fb787ce1a7ddae82ee8/crel.min.js"
-      crossorigin="anonymous"
-    ></script>
     <script
       src="https://cdn.jsdelivr.net/npm/slim-select@1.27.0/dist/slimselect.min.js"
       crossorigin="anonymous"
