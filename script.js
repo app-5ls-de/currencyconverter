@@ -24,7 +24,7 @@ const update_rates = () =>
     });
 
 const get_convertion_rate = (from, to) => rates[to] / rates[from];
-const get_currencies = () => Object.keys(rates);
+const get_currencies = () => Object.keys(rates).sort();
 
 function get_rates() {
   if (localStorage.getItem("rates")) {
