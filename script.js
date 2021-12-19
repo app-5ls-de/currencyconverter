@@ -18,18 +18,18 @@ const update_rates = () =>
     .then((response) => response.json())
     .then((data) => {
       localStorage.setItem("rates", JSON.stringify(data));
-      rates = data;
+      rates = data.data;
 
       return data;
     });
 
-const get_convertion_rate = (from, to) => rates.data[to] / rates.data[from];
-const get_currencies = () => Object.keys(rates.data);
+const get_convertion_rate = (from, to) => rates[to] / rates[from];
+const get_currencies = () => Object.keys(rates);
 
 function get_rates() {
   if (localStorage.getItem("rates")) {
     let data = JSON.parse(localStorage.getItem("rates"));
-    rates = data;
+    rates = data.data;
 
     if (new Date() - data.query.timestamp * 1000 > relativeTime.UNITS.day)
       update_rates();
@@ -37,13 +37,7 @@ function get_rates() {
     update_rates();
 
     rates = {
-      query: {
-        base_currency,
-        timestamp: 0,
-      },
-      data: {
-        [base_currency]: 1,
-      },
+      [base_currency]: 1,
     };
   }
 }
