@@ -2,9 +2,9 @@ const relativeTime = new RelativeTime("en");
 
 const el_select_from = document.getElementById("select_from");
 const el_select_to = document.getElementById("select_to");
-
 const el_input_from = document.getElementById("input_from");
 const el_input_to = document.getElementById("input_to");
+const div_updated_at = document.getElementById("updated_at");
 
 const base_currency = "EUR";
 var rates = {
@@ -28,6 +28,7 @@ const update_rates = () =>
       localStorage.setItem("rates", JSON.stringify(data));
       rates = data.data;
 
+      show_updated_at(data.query.timestamp * 1000);
       set_select_data();
     });
 
@@ -38,12 +39,17 @@ function get_rates() {
   if (localStorage.getItem("rates")) {
     let data = JSON.parse(localStorage.getItem("rates"));
     rates = data.data;
+    show_updated_at(data.query.timestamp * 1000);
 
     if (new Date() - data.query.timestamp * 1000 < relativeTime.UNITS.day)
       return; // skip update if less than 24h old
   }
 
   update_rates();
+}
+
+function show_updated_at(timestamp) {
+  div_updated_at.innerText = "Updated " + relativeTime(timestamp);
 }
 
 function set_select_data() {
