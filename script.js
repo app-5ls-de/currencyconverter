@@ -1,7 +1,9 @@
 const relativeTime = new RelativeTime("en");
 
-var rates;
 const base_currency = "EUR";
+var rates = {
+  [base_currency]: 1,
+};
 
 const update_rates = () =>
   fetch(
@@ -20,7 +22,7 @@ const update_rates = () =>
       localStorage.setItem("rates", JSON.stringify(data));
       rates = data.data;
 
-      return data;
+      set_select_data();
     });
 
 const get_convertion_rate = (from, to) => rates[to] / rates[from];
@@ -31,15 +33,26 @@ function get_rates() {
     let data = JSON.parse(localStorage.getItem("rates"));
     rates = data.data;
 
-    if (new Date() - data.query.timestamp * 1000 > relativeTime.UNITS.day)
-      update_rates();
-  } else {
-    update_rates();
-
-    rates = {
-      [base_currency]: 1,
-    };
+    if (new Date() - data.query.timestamp * 1000 < relativeTime.UNITS.day)
+      return; // skip update if less than 24h old
   }
+
+  update_rates();
+}
+
+function set_select_data() {
+  let data = get_currencies().map((currency) => ({ text: currency }));
+
+  select_from.setData(data);
+  select_to.setData(data);
+
+  select_from.set(base_currency);
+  select_to.set(base_currency);
 }
 
 get_rates();
+
+const select_from = new SlimSelect({ select: "#select_from" });
+const select_to = new SlimSelect({ select: "#select_to" });
+
+set_select_data();
