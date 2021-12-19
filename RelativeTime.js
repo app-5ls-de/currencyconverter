@@ -22,8 +22,8 @@
     const opts = { ...DEFAULTS.options, ...options };
     const rtf = new Intl.RelativeTimeFormat(locale, opts);
 
-    function from(d1, d2) {
-      const elapsed = d1 - (d2 || new Date());
+    function from(d1, d2 = new Date()) {
+      const elapsed = d1 - d2;
 
       // "Math.abs" accounts for both "past" & "future" scenarios
       for (const u in UNITS)
