@@ -46,8 +46,8 @@ function set_select_data() {
   select_from.setData(data);
   select_to.setData(data);
 
-  select_from.set(base_currency);
-  select_to.set(base_currency);
+  select_from.set(localStorage.getItem("from") || base_currency);
+  select_to.set(localStorage.getItem("to") || base_currency);
 }
 
 get_rates();
