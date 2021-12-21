@@ -13,7 +13,8 @@ var rates = {
 
 async function update_rates() {
   const response = await fetch(
-    "https://freecurrencyapi.net/api/v2/latest?apikey=2cefa430-5ffb-11ec-903b-796c33e59667"
+    "https://freecurrencyapi.net/api/v2/latest?apikey=2cefa430-5ffb-11ec-903b-796c33e59667&base_currency=" +
+      base_currency
   );
   if (!response.ok) throw new Error(response.statusText);
   const data_raw = await response.json();
