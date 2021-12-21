@@ -13,8 +13,7 @@ var rates = {
 
 const update_rates = () =>
   fetch(
-    "https://freecurrencyapi.net/api/v2/latest?apikey=2cefa430-5ffb-11ec-903b-796c33e59667&base_currency=" +
-      base_currency
+    "https://freecurrencyapi.net/api/v2/latest?apikey=2cefa430-5ffb-11ec-903b-796c33e59667"
   )
     .then((response) => {
       if (response.ok) {
@@ -24,6 +23,13 @@ const update_rates = () =>
       }
     })
     .then((response) => response.json())
+    .then((data) => {
+      if (data.data && data.data.length && data.query.timestamp) {
+        return Promise.resolve(data);
+      } else {
+        return Promise.reject(new Error("empty data"));
+      }
+    })
     .then((data) => {
       localStorage.setItem("rates", JSON.stringify(data));
       rates = data.data;
