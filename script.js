@@ -5,11 +5,11 @@ function RelativeTime(locale = "en", minimal_unit = "second", options = {}) {
 
   // in miliseconds
   const UNITS = {
-    year: 24 * 60 * 60 * 1000 * 365,
-    month: (24 * 60 * 60 * 1000 * 365) / 12,
-    day: 24 * 60 * 60 * 1000,
-    hour: 60 * 60 * 1000,
-    minute: 60 * 1000,
+    year: 1000 * 60 * 60 * 24 * 365,
+    month: (1000 * 60 * 60 * 24 * 365) / 12,
+    day: 1000 * 60 * 60 * 24,
+    hour: 1000 * 60 * 60,
+    minute: 1000 * 60,
     second: 1000,
   };
 
