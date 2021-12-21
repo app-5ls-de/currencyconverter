@@ -13,7 +13,8 @@ var rates = {
 
 const update_rates = () =>
   fetch(
-    "https://freecurrencyapi.net/api/v2/latest?apikey=2cefa430-5ffb-11ec-903b-796c33e59667"
+    "https://freecurrencyapi.net/api/v2/latest?apikey=2cefa430-5ffb-11ec-903b-796c33e59667&base_currency=" +
+      base_currency
   )
     .then((response) => {
       if (response.ok) {
@@ -30,11 +31,15 @@ const update_rates = () =>
         return Promise.reject(new Error("empty data"));
       }
     })
-    .then((data) => {
+    .then((data_raw) => {
+      let data = {
+        timestamp: data_raw.query.timestamp,
+        rates: data_raw.data,
+      };
       localStorage.setItem("rates", JSON.stringify(data));
-      rates = data.data;
+      rates = data.rates;
 
-      show_updated_at(data.query.timestamp * 1000);
+      show_updated_at(data.timestamp * 1000);
       set_select_data();
     });
 
@@ -44,11 +49,10 @@ const get_currencies = () => Object.keys(rates).sort();
 function get_rates() {
   if (localStorage.getItem("rates")) {
     let data = JSON.parse(localStorage.getItem("rates"));
-    rates = data.data;
-    show_updated_at(data.query.timestamp * 1000);
+    rates = data.rates;
+    show_updated_at(data.timestamp * 1000);
 
-    if (new Date() - data.query.timestamp * 1000 < relativeTime.UNITS.day)
-      return; // skip update if less than 24h old
+    if (new Date() - data.timestamp * 1000 < relativeTime.UNITS.day) return; // skip update if less than 24h old
   }
 
   update_rates();
