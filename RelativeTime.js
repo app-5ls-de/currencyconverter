@@ -13,21 +13,16 @@
     second: 1000,
   };
 
-  const DEFAULTS = {
-    locale: "en",
-    options: { numeric: "auto" },
-  };
-
-  function RelativeTime(locale = DEFAULTS.locale, options) {
-    const opts = { ...DEFAULTS.options, ...options };
-    const rtf = new Intl.RelativeTimeFormat(locale, opts);
+  function RelativeTime(locale = "en", minimal_unit = "second", options = {}) {
+    options.numeric = options.numeric || "auto";
+    const rtf = new Intl.RelativeTimeFormat(locale, options);
 
     function from(d1, d2 = new Date()) {
       const elapsed = d1 - d2;
 
       // "Math.abs" accounts for both "past" & "future" scenarios
       for (const u in UNITS)
-        if (Math.abs(elapsed) > UNITS[u] || u == "second")
+        if (Math.abs(elapsed) > UNITS[u] || u == minimal_unit)
           return rtf.format(Math.round(elapsed / UNITS[u]), u);
     }
     from.UNITS = UNITS;

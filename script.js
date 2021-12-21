@@ -1,4 +1,4 @@
-const relativeTime = new RelativeTime("en");
+const relativeTime = new RelativeTime("en", "minute");
 
 const el_select_from = document.getElementById("select_from");
 const el_select_to = document.getElementById("select_to");
