@@ -19,38 +19,19 @@ async function fetch_json(url) {
 }
 
 async function update_rates() {
-  let data_raw = await fetch_json(
+  const response = await fetch(
     "https://freecurrencyapi.net/api/v2/latest?apikey=2cefa430-5ffb-11ec-903b-796c33e59667"
   );
-  let data;
-  if (
-    data_raw.data &&
-    data_raw.data[base_currency] &&
-    data_raw.query.timestamp
-  ) {
-    data = {
-      timestamp: data_raw.query.timestamp,
-      rates: data_raw.data,
-    };
-  } else {
-    data_raw = await fetch_json(
-      "http://api.exchangeratesapi.io/v1/latest?access_key=e1b59a693f99e42e9285c94eae2d464f&format=1"
-    );
-    if (
-      data_raw.success &&
-      data_raw.rates &&
-      data_raw.rates[base_currency] &&
-      data_raw.timestamp
-    ) {
-      data = {
-        timestamp: data_raw.timestamp,
-        rates: data_raw.rates,
-      };
-    } else {
-      console.error("Failed to fetch rates");
-      return;
-    }
-  }
+  if (!response.ok) throw new Error(response.statusText);
+  const data_raw = await response.json();
+
+  if (!(data_raw.success && data_raw.rates && data_raw.rates[base_currency]))
+    throw new Error("Failed to fetch rates");
+
+  let data = {
+    timestamp: data_raw.timestamp,
+    rates: data_raw.rates,
+  };
 
   localStorage.setItem("rates", JSON.stringify(data));
   rates = data.rates;
