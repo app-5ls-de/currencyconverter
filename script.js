@@ -98,7 +98,7 @@ function set_select_data() {
 }
 
 function update_forward() {
-  localStorage.setItem("from", select_from.selected());
+  localStorage.setItem("from", select_from.selected() || base_currency);
   if (el_input_from.value)
     el_input_to.value = (
       get_convertion_rate(select_from.selected(), select_to.selected()) *
@@ -107,7 +107,7 @@ function update_forward() {
 }
 
 function update_backward() {
-  localStorage.setItem("to", select_to.selected());
+  localStorage.setItem("to", select_to.selected() || base_currency);
   if (el_input_to.value)
     el_input_from.value = (
       get_convertion_rate(select_to.selected(), select_from.selected()) *
