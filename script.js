@@ -43,7 +43,7 @@ function get_rates() {
     rates = data.rates;
     show_updated_at(data.timestamp * 1000);
 
-    if (new Date() - data.timestamp * 1000 < relativeTime.UNITS.day) return; // skip update if less than 24h old
+    if (new Date() - data.timestamp * 1000 < relativeTime.UNITS.hour) return; // skip update if less than an hour old
   }
 
   update_rates();
