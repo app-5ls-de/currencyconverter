@@ -53,7 +53,6 @@ const update_rates = () =>
         })
         .then((response) => response.json())
         .then((data_raw) => {
-          console.log(data_raw);
           if (
             data_raw.success &&
             data_raw.rates &&
