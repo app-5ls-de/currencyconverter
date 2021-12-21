@@ -24,23 +24,20 @@ const update_rates = () =>
       }
     })
     .then((response) => response.json())
-    .then((data) => {
-      if (data.data && data.data.length && data.query.timestamp) {
-        return Promise.resolve(data);
+    .then((data_raw) => {
+      if (data_raw.data && data_raw.data.length && data_raw.query.timestamp) {
+        let data = {
+          timestamp: data_raw.query.timestamp,
+          rates: data_raw.data,
+        };
+        localStorage.setItem("rates", JSON.stringify(data));
+        rates = data.rates;
+
+        show_updated_at(data.timestamp * 1000);
+        set_select_data();
       } else {
         return Promise.reject(new Error("empty data"));
       }
-    })
-    .then((data_raw) => {
-      let data = {
-        timestamp: data_raw.query.timestamp,
-        rates: data_raw.data,
-      };
-      localStorage.setItem("rates", JSON.stringify(data));
-      rates = data.rates;
-
-      show_updated_at(data.timestamp * 1000);
-      set_select_data();
     });
 
 const get_convertion_rate = (from, to) => rates[to] / rates[from];
