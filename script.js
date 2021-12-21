@@ -13,8 +13,7 @@ var rates = {
 
 const update_rates = () =>
   fetch(
-    "https://freecurrencyapi.net/api/v2/latest?apikey=2cefa430-5ffb-11ec-903b-796c33e59667&base_currency=" +
-      base_currency
+    "https://freecurrencyapi.net/api/v2/latest?apikey=2cefa430-5ffb-11ec-903b-796c33e59667"
   )
     .then((response) => {
       if (response.ok) {
@@ -25,7 +24,7 @@ const update_rates = () =>
     })
     .then((response) => response.json())
     .then((data_raw) => {
-      if (data_raw.data && data_raw.data.length && data_raw.query.timestamp) {
+      if (data_raw.data && data_raw.query.timestamp) {
         let data = {
           timestamp: data_raw.query.timestamp,
           rates: data_raw.data,
@@ -38,6 +37,41 @@ const update_rates = () =>
       } else {
         return Promise.reject(new Error("empty data"));
       }
+    })
+    .catch((error) => {
+      console.error(error);
+
+      fetch(
+        "http://api.exchangeratesapi.io/v1/latest?access_key=e1b59a693f99e42e9285c94eae2d464f&format=1"
+      )
+        .then((response) => {
+          if (response.ok) {
+            return Promise.resolve(response);
+          } else {
+            return Promise.reject(new Error(response.statusText));
+          }
+        })
+        .then((response) => response.json())
+        .then((data_raw) => {
+          console.log(data_raw);
+          if (
+            data_raw.success &&
+            data_raw.rates &&
+            data_raw.timestamp
+          ) {
+            let data = {
+              timestamp: data_raw.timestamp,
+              rates: data_raw.rates,
+            };
+            localStorage.setItem("rates", JSON.stringify(data));
+            rates = data.rates;
+
+            show_updated_at(data.timestamp * 1000);
+            set_select_data();
+          } else {
+            return Promise.reject(new Error("empty data"));
+          }
+        });
     });
 
 const get_convertion_rate = (from, to) => rates[to] / rates[from];
