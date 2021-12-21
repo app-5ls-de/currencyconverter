@@ -18,12 +18,12 @@ async function update_rates() {
   if (!response.ok) throw new Error(response.statusText);
   const data_raw = await response.json();
 
-  if (!(data_raw.success && data_raw.rates && data_raw.rates[base_currency]))
+  if (!(data_raw.data && data_raw.data[base_currency]))
     throw new Error("Failed to fetch rates");
 
   let data = {
-    timestamp: data_raw.timestamp,
-    rates: data_raw.rates,
+    timestamp: data_raw.query.timestamp,
+    rates: data_raw.data,
   };
 
   localStorage.setItem("rates", JSON.stringify(data));
