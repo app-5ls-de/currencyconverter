@@ -66,8 +66,8 @@ const get_convertion_rate = (from, to) => rates[to] / rates[from];
 const get_currencies = () => Object.keys(rates).sort();
 
 function get_rates() {
-  if (localStorage.getItem("rates")) {
-    let data = JSON.parse(localStorage.getItem("rates"));
+  let data = JSON.parse(localStorage.getItem("rates"));
+  if (data && data.rates && data.rates[base_currency]) {
     rates = data.rates;
     show_updated_at(data.timestamp * 1000);
 
