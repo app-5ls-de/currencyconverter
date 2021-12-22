@@ -34,6 +34,9 @@ const el_input_from = document.getElementById("input_from");
 const el_input_to = document.getElementById("input_to");
 const div_updated_at = document.getElementById("updated_at");
 
+const select_from = new SlimSelect({ select: el_select_from });
+const select_to = new SlimSelect({ select: el_select_to });
+
 const base_currency = "EUR";
 var rates = {
   [base_currency]: 1,
@@ -47,7 +50,7 @@ async function update_rates() {
   if (!response.ok) throw new Error(response.statusText);
   const data_raw = await response.json();
 
-  if (!(data_raw.data && data_raw.data[base_currency]))
+  if (!(data_raw && data_raw.data && data_raw.data[base_currency]))
     throw new Error("Failed to fetch rates");
 
   let data = {
@@ -110,9 +113,6 @@ function update_backward() {
 }
 
 get_rates();
-const select_from = new SlimSelect({ select: el_select_from });
-const select_to = new SlimSelect({ select: el_select_to });
-
 set_select_data();
 
 el_input_from.addEventListener("input", update_forward);
