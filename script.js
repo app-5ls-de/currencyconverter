@@ -69,7 +69,6 @@ async function update_rates() {
 }
 
 const get_convertion_rate = (from, to, r = rates) => r[to] / r[from];
-const get_currencies = () => Object.keys(rates).sort();
 
 function get_rates() {
   let data = JSON.parse(localStorage.getItem("rates"));
@@ -88,7 +87,9 @@ function show_updated_at(timestamp) {
 }
 
 function set_select_data() {
-  let data = get_currencies().map((currency) => ({ text: currency }));
+  let data = Object.keys(rates)
+    .sort()
+    .map((currency) => ({ text: currency }));
 
   select_from.setData(data);
   select_to.setData(data);
