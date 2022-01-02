@@ -16,6 +16,9 @@ function RelativeTime(locale = "en", minimal_unit = "second", options = {}) {
   function from(d1, d2 = new Date()) {
     const elapsed = d1 - d2;
 
+    if (Math.round(elapsed / UNITS[minimal_unit]) == 0)
+      return rtf.format(0, "second");
+
     // "Math.abs" accounts for both "past" & "future" scenarios
     for (const u in UNITS)
       if (Math.abs(elapsed) > UNITS[u] || u == minimal_unit)
