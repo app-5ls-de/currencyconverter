@@ -98,21 +98,27 @@ function set_select_data() {
 }
 
 function update_forward() {
-  localStorage.setItem("from", select_from.selected() || base_currency);
-  if (el_input_from.value)
+  const from = select_from.selected() || base_currency;
+  const to = select_to.selected() || base_currency;
+
+  localStorage.setItem("from", from);
+  if (el_input_from.value) {
     el_input_to.value = (
-      get_convertion_rate(select_from.selected(), select_to.selected()) *
-      el_input_from.value
+      get_convertion_rate(from, to) * el_input_from.value
     ).toFixed(2);
+  } else el_input_to.value = "";
 }
 
 function update_backward() {
-  localStorage.setItem("to", select_to.selected() || base_currency);
-  if (el_input_to.value)
+  const from = select_from.selected() || base_currency;
+  const to = select_to.selected() || base_currency;
+
+  localStorage.setItem("to", to);
+  if (el_input_to.value) {
     el_input_from.value = (
-      get_convertion_rate(select_to.selected(), select_from.selected()) *
-      el_input_to.value
+      get_convertion_rate(from, to) * el_input_to.value
     ).toFixed(2);
+  } else el_input_from.value = "";
 }
 
 get_rates();
