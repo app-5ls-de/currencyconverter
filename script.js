@@ -68,7 +68,7 @@ async function update_rates() {
   set_select_data();
 }
 
-const get_convertion_rate = (from, to) => rates[to] / rates[from];
+const get_convertion_rate = (from, to, r = rates) => r[to] / r[from];
 const get_currencies = () => Object.keys(rates).sort();
 
 function get_rates() {
