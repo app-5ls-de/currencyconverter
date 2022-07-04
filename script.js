@@ -68,6 +68,78 @@ async function update_rates() {
   set_select_data();
 }
 
+async function show_history() {
+  const from = select_from.selected() || base_currency;
+  const to = select_to.selected() || base_currency;
+  if (from == to) {
+    return;
+  }
+
+  var history = JSON.parse(localStorage.getItem("history"));
+
+  // skip update if valid and less than a week old
+  if (
+    !(
+      history?.data?.[Object.keys(history.data)[0]]?.[base_currency] &&
+      history?.query?.timestamp &&
+      new Date() - history.query.timestamp * 1000 < relativeTime.UNITS.day * 7
+    )
+  ) {
+    const date_to = new Date().toISOString().split("T")[0];
+    const date_from = new Date(new Date() - 3 * relativeTime.UNITS.month)
+      .toISOString()
+      .split("T")[0];
+
+    const response = await fetch(
+      "https://freecurrencyapi.net/api/v2/historical?apikey=2cefa430-5ffb-11ec-903b-796c33e59667&base_currency=" +
+        base_currency +
+        "&date_from=" +
+        date_from +
+        "&date_to=" +
+        date_to
+    );
+    if (!response.ok) throw new Error(response.statusText);
+    const data_raw = await response.json();
+
+    if (!data_raw?.data?.[date_from]?.[base_currency])
+      throw new Error("Failed to fetch rates");
+
+    history = data_raw;
+    localStorage.setItem("history", JSON.stringify(history));
+  }
+
+  if (!history) return;
+
+  var data = Object.values(history.data).map((entry) =>
+    get_convertion_rate(from, to, entry)
+  );
+  console.log(data);
+
+  const labels = Object.keys(history.data);
+
+  const myChart = new Chart(document.getElementById("myChart"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "My First dataset",
+          backgroundColor: "rgb(255, 99, 132)",
+          borderColor: "rgb(255, 99, 132)",
+          data,
+        },
+      ],
+    },
+    options: {
+      elements: {
+        line: {
+          tension: 0.4,
+        },
+      },
+    },
+  });
+}
+
 const get_convertion_rate = (from, to, r = rates) => r[to] / r[from];
 
 function get_rates() {
@@ -124,9 +196,16 @@ function update_backward() {
 
 get_rates();
 set_select_data();
+show_history();
 
 el_input_from.addEventListener("input", update_forward);
-el_select_from.addEventListener("change", update_forward);
+el_select_from.addEventListener("change", () => {
+  update_forward();
+  show_history();
+});
 
 el_input_to.addEventListener("input", update_backward);
-el_select_to.addEventListener("change", update_backward);
+el_select_to.addEventListener("change", () => {
+  update_backward();
+  show_history();
+});

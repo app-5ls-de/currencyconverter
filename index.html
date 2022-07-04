@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,7 +9,7 @@
     <meta name="web_author" content="Patrick Haußmann" />
     <link rel="author" href="https://patrickhaussmann.de/" />
     <meta name="language" content="en" />
-    
+
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -35,9 +35,9 @@
     <meta name="msapplication-TileColor" content="#960e4d" />
     <meta name="msapplication-config" content="/icons/browserconfig.xml" />
     <meta name="theme-color" content="#ffffff" />
-    
+
     <title>Currency Converter</title>
-    
+
     <link
       href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"
       rel="stylesheet"
@@ -89,10 +89,17 @@
       </div>
     </div>
 
+    <canvas id="myChart"></canvas>
+
     <div id="updated_at"></div>
 
     <script
       src="https://cdn.jsdelivr.net/npm/slim-select@1.27.0/dist/slimselect.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"
       crossorigin="anonymous"
     ></script>
     <script src="/script.js"></script>
